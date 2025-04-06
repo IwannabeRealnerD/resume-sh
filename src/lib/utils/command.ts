@@ -1,26 +1,22 @@
-import { COMMANDS, HELP_COMMAND } from "$lib/constants/command";
-import type { TCommandValues } from "$lib/types/command";
+import { COMMAND_KEYS } from "$lib/constants/command";
 
 export const historyLengthCutter = <T>(commandArr: T[]): T[] => {
 	return commandArr.slice(-40);
 };
 
-export const isValidCommand = (userInputCommand: string) => {
-	const isValidInput = Object.values(COMMANDS).includes(
-		userInputCommand as TCommandValues
-	);
+/**
+ * Validates the user input command and returns the color utility class based on the command
+ * @param userInputCommand - User input command
+ * @param availableCommands - Available commands
+ * @returns returns the color utility class based on the command
+ */
+export const commandValidator = (userInputCommand: string, availableCommands?: string[]) => {
+	const isValidInput = COMMAND_KEYS.includes(userInputCommand);
 	if (isValidInput) {
-		return "validInput";
+		return "text-highlight";
 	}
-	return "invalidInput";
-};
-
-export const makeHelpOutput = () => {
-	let commandOutput = "Here are commands that you can use: \n";
-	Object.entries(HELP_COMMAND).forEach(([command, commandResult], index) => {
-		commandOutput = commandOutput.concat(
-			` ${index + 1}. ${command} : ${commandResult}\n`
-		);
-	});
-	return commandOutput;
+	if (availableCommands && availableCommands.length !== 0) {
+		return "text-white";
+	}
+	return "text-alert";
 };
