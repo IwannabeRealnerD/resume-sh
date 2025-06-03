@@ -9,15 +9,7 @@ describe("findAvailableCommand()", () => {
 	});
 	it('should return suggestions when input is "c"', () => {
 		const result = findAvailableCommand("c");
-		expect(result).toEqual([
-			"clear",
-			"calendar add",
-			"copy ko address",
-			"copy en address",
-			"copy url",
-			"call groom",
-			"call bride"
-		]);
+		expect(result).toEqual(["clear", "contact"]);
 	});
 	it("should return empty array when input is not existing command", () => {
 		const result = findAvailableCommand("notExisting");
