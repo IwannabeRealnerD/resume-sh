@@ -25,7 +25,7 @@
 </div>
 <br/>
 <div align="center">
-  <img src="images/screenshot.png" alt="screenshot" >
+<img src="images/screenshot.png" alt="screenshot" >
 </div>
 
 ## About this project
