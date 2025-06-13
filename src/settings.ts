@@ -25,6 +25,11 @@ export const COMMAND_DEFINITIONS: { [key: string]: CommandDefinition } = {
 			"- Email: iwannaberealnerd@gmail.com\n- Phone Number: +821051200592\n- LinkedIn: www.linkedin.com/in/honggwanjeong",
 		description: "Get khanne's contact information"
 	},
+	coooooooontact: {
+		action: () =>
+			"- Email: iwannaberealnerd@gmail.com\n- Phone Number: +821051200592\n- LinkedIn: www.linkedin.com/in/honggwanjeong",
+		description: "Get khanne's contact information"
+	},
 	github: {
 		action: () => {
 			window.open("https://github.com/IwannabeRealnerD");

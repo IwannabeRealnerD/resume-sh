@@ -7,7 +7,12 @@
 	import { historyLengthCutter, commandValidator } from "$lib/utils/command";
 
 	import AutoComplete from "./AutoComplete.svelte";
-	import { clearStorageArr, findAvailableCommand, outputCreator, putLocalStorageArr } from "./util";
+	import {
+		clearStorageArr,
+		findAvailableCommand,
+		outputCreator,
+		putLocalStorageArr
+	} from "./util";
 	import Prompt from "$lib/components/Prompt.svelte";
 
 	interface Props {
@@ -19,25 +24,23 @@
 
 	let inputCommand = $state("");
 
-	const changeCommandHandler = (command: string) => {
-		inputCommand = command;
-	};
-
 	let isComposing = false;
 
 	let availableCommands = $derived(findAvailableCommand(inputCommand));
-	let isWholeCommand = $derived(COMMAND_KEYS.find((value) => value === inputCommand));
+	let isWholeCommand = $derived(
+		COMMAND_KEYS.find((value) => value === inputCommand)
+	);
 
-	const onSubmit = async () => {
-		if (inputCommand == "clear") {
+	const handleCommandInput = async (validCommand: string) => {
+		if (validCommand == "clear") {
 			commandArr = [];
 			inputCommand = "";
 			clearStorageArr();
 			return;
 		}
 		const commandObject = {
-			command: inputCommand,
-			result: outputCreator(inputCommand)
+			command: validCommand,
+			result: outputCreator(validCommand)
 		};
 		putLocalStorageArr(commandObject);
 		if (!commandArr) {
@@ -53,13 +56,16 @@
 		await tick();
 		window.scrollTo(0, document.body.scrollHeight);
 	};
-	let isSuggestionVisible = $derived(availableCommands.length !== 0 && !isWholeCommand);
+
+	let isSuggestionVisible = $derived(
+		availableCommands.length !== 0 && !isWholeCommand
+	);
 </script>
 
 <form autocomplete="off" class="relative flex pt-2">
 	{#if isSuggestionVisible}
 		<AutoComplete
-			onChangeCommand={changeCommandHandler}
+			onSuggestionClick={handleCommandInput}
 			currentInput={inputCommand}
 			{availableCommands}
 		/>
@@ -74,9 +80,15 @@
 		oncompositionend={() => (isComposing = false)}
 		name="command"
 		onkeydown={(event) => {
+			if (isSuggestionVisible) {
+				if (event.key === "Enter" && !isComposing) {
+					event.preventDefault();
+				}
+				return;
+			}
 			if (event.key === "Enter" && !isComposing) {
 				event.preventDefault();
-				onSubmit();
+				handleCommandInput(inputCommand);
 			}
 		}}
 		bind:value={inputCommand}

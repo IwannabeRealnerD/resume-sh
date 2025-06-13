@@ -6,7 +6,7 @@
 
 	interface Props {
 		currentInput: string;
-		onChangeCommand: (command: string) => void;
+		onSuggestionClick: (validCommand: string) => void;
 		availableCommands: string[];
 	}
 
@@ -37,7 +37,7 @@
 		if (KeyboardDownEvent.code === "Enter") {
 			KeyboardDownEvent.preventDefault();
 			const selectedCommand = props.availableCommands[focusIndex];
-			props.onChangeCommand(selectedCommand);
+			props.onSuggestionClick(selectedCommand);
 			return;
 		}
 	};
@@ -60,19 +60,21 @@
 	});
 </script>
 
+<!-- NOTE: left-26 is hardcoded for the width of prompt  -->
 <article
 	style="margin-left: {leftMargin}px"
-	class="bg-foreground absolute bottom-1/2 left-23.5 min-w-32"
+	class="bg-foreground absolute bottom-2/3 left-26 min-w-32"
 	bind:this={wrapperElement}
 >
 	<ul class="bg-white">
 		{#each props.availableCommands as command, index (command)}<li>
 				<button
-					class={clsx("p-1", {
-						"w-full bg-[#0000ff] text-start text-white": index === focusIndex
+					class={clsx("p-1 cursor-pointer w-full text-start", {
+						"bg-[#0000ff] text-white": index === focusIndex
 					})}
 					onclick={() => {
-						focusIndex = index;
+						const selectedCommand = props.availableCommands[index];
+						props.onSuggestionClick(selectedCommand);
 					}}>{command}</button
 				>
 			</li>{/each}
