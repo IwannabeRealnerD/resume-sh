@@ -6,7 +6,9 @@
 	import { historyLengthCutter } from "$lib/utils/command";
 	import { getLocalStorageItem } from "$lib/utils/storage";
 
-	import { UserInputForm, WelcomeMessage, HistoryLine } from "./components";
+	import HistoryLine from "./components/HistoryLine.svelte";
+	import UserInputForm from "./components/UserInputForm/index.svelte";
+	import WelcomeMessage from "./components/WelcomeMessage.svelte";
 
 	let commandArr: CommandType[] | undefined = $state([]);
 	let inputBind: HTMLElement | undefined = $state();
@@ -23,22 +25,14 @@
 	});
 </script>
 
-<main class="container">
+<main>
 	<div>
-		{#if commandArr === undefined || commandArr.length === 0}
-			<WelcomeMessage />
-		{/if}
+		<WelcomeMessage />
 		{#if commandArr}
-			{#each commandArr as command}
+			{#each commandArr as command, index (`${command.command} ${index}`)}
 				<HistoryLine {command} />
 			{/each}
 		{/if}
 		<UserInputForm bind:commandArr bind:inputBind />
 	</div>
 </main>
-
-<style>
-	.container {
-		padding: 1rem;
-	}
-</style>
